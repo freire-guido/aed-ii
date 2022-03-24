@@ -1,0 +1,6 @@
+/home/godo/code/aed-ii/ejercitacion_uso_clases/build/CMakeFiles/tests_algobot.dir
+/home/godo/code/aed-ii/ejercitacion_uso_clases/build/CMakeFiles/tests_ejercitacion.dir
+/home/godo/code/aed-ii/ejercitacion_uso_clases/build/CMakeFiles/gtest.dir
+/home/godo/code/aed-ii/ejercitacion_uso_clases/build/CMakeFiles/gtest_main.dir
+/home/godo/code/aed-ii/ejercitacion_uso_clases/build/CMakeFiles/edit_cache.dir
+/home/godo/code/aed-ii/ejercitacion_uso_clases/build/CMakeFiles/rebuild_cache.dir
