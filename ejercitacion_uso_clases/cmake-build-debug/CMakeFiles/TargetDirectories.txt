@@ -1,6 +1,0 @@
-/media/clinux01/LLAVERO/ejercitacion_uso_clases/cmake-build-debug/CMakeFiles/edit_cache.dir
-/media/clinux01/LLAVERO/ejercitacion_uso_clases/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/media/clinux01/LLAVERO/ejercitacion_uso_clases/cmake-build-debug/CMakeFiles/gtest.dir
-/media/clinux01/LLAVERO/ejercitacion_uso_clases/cmake-build-debug/CMakeFiles/tests_ejercitacion.dir
-/media/clinux01/LLAVERO/ejercitacion_uso_clases/cmake-build-debug/CMakeFiles/tests_algobot.dir
-/media/clinux01/LLAVERO/ejercitacion_uso_clases/cmake-build-debug/CMakeFiles/gtest_main.dir
