@@ -4,7 +4,7 @@ Conjunto<T>::Conjunto(): _raiz{nullptr} {}
 
 template <class T>
 Conjunto<T>::~Conjunto() {
-    // delete _raiz;
+    destruir(_raiz);
 }
 
 template <class T>
@@ -46,26 +46,36 @@ void Conjunto<T>::insertar(const T& clave) {
 
 template <class T>
 void Conjunto<T>::remover(const T& clave) {
-    Nodo* nodoActual = _raiz;
-    if (nodoActual && nodoActual->valor == clave) {
-        delete nodoActual;
+    if (_raiz && _raiz->valor == clave) {
+        delete _raiz;
         _raiz = nullptr;
-    }
-    while (nodoActual) {
-        if (clave < nodoActual->valor) {
-            Nodo* hijoIzq = nodoActual->izq;
-            if (hijoIzq && hijoIzq->valor == clave) {
-                delete hijoIzq;
-                nodoActual->izq = nullptr;
+    } else {
+        // busco al padre del nodo a borrar
+        Nodo* padre = _raiz;
+        bool esHijoIzq = padre->izq && padre->izq->valor == clave;
+        while (!(esHijoIzq || (padre->der && padre->der->valor == clave))) {
+            if (padre->izq && clave < padre->izq->valor) {
+                padre = padre->izq;
+            } else {
+                padre = padre->der;
             }
-            nodoActual = hijoIzq;
-        } else {
-            Nodo* hijoDer = nodoActual->der;
-            if (hijoDer && hijoDer->valor == clave) {
-                delete hijoDer;
-                nodoActual->der = nullptr;
+            esHijoIzq = padre->izq && padre->izq->valor == clave;
+        }
+        if (padre) {
+            // busco al siguiente del nodo a borrar.
+            Nodo* borrar = esHijoIzq ? padre->izq : padre->der;
+            if (borrar->der->izq) {
+                Nodo* sucesor = borrar->der;
+                while(sucesor->izq->izq) {
+                    sucesor = sucesor->izq;
+                }
+                borrar->der = sucesor->izq;
+                sucesor->izq = borrar->der->der;
+                borrar->der->der = sucesor;    
             }
-            nodoActual = nodoActual->der;
+            esHijoIzq ? padre->izq : padre->der = borrar->der;
+            borrar->der->izq = borrar->izq;
+            delete borrar;
         }
     }
 }

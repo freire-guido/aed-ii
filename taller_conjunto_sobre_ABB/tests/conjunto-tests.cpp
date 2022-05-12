@@ -30,14 +30,6 @@ TEST(conjunto_test, test_insertar_cinco_valores) {
 
 TEST(conjunto_test, test_pertenece) {
   Conjunto<int> c;
-  if (true) {
-    Conjunto<int> miami;
-    miami.insertar(5);
-    miami.insertar(4);
-    miami.insertar(7);
-    miami.insertar(6);
-    miami.insertar(8);
-  }
   for (int i = 0; i < 5; i++) {
     EXPECT_FALSE(c.pertenece(i));
   }
