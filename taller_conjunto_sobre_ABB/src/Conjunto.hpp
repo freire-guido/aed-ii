@@ -4,7 +4,7 @@ Conjunto<T>::Conjunto(): _raiz{nullptr} {}
 
 template <class T>
 Conjunto<T>::~Conjunto() {
-    destruir(_raiz);
+    _destruir(_raiz);
 }
 
 template <class T>
@@ -46,37 +46,44 @@ void Conjunto<T>::insertar(const T& clave) {
 
 template <class T>
 void Conjunto<T>::remover(const T& clave) {
-    if (_raiz && _raiz->valor == clave) {
-        delete _raiz;
-        _raiz = nullptr;
-    } else {
-        // busco al padre del nodo a borrar
-        Nodo* padre = _raiz;
-        bool esHijoIzq = padre->izq && padre->izq->valor == clave;
-        while (!(esHijoIzq || (padre->der && padre->der->valor == clave))) {
-            if (padre->izq && clave < padre->izq->valor) {
-                padre = padre->izq;
-            } else {
-                padre = padre->der;
-            }
-            esHijoIzq = padre->izq && padre->izq->valor == clave;
+    bool esRaiz = false;
+    Nodo* padre = _raiz;
+    if (padre && padre->valor == clave) {
+        padre = new Nodo(_raiz->valor + 1);
+        padre->izq= _raiz;
+        esRaiz = true;
+    }
+    // busco al padre del nodo a borrar
+    bool esHijoIzq = padre->izq && padre->izq->valor == clave;
+    while (!(esHijoIzq || (padre->der && padre->der->valor == clave))) {
+        if (padre->izq && clave < padre->izq->valor) {
+            padre = padre->izq;
+        } else {
+            padre = padre->der;
         }
-        if (padre) {
-            // busco al siguiente del nodo a borrar.
-            Nodo* borrar = esHijoIzq ? padre->izq : padre->der;
-            if (borrar->der->izq) {
-                Nodo* sucesor = borrar->der;
-                while(sucesor->izq->izq) {
-                    sucesor = sucesor->izq;
-                }
-                borrar->der = sucesor->izq;
-                sucesor->izq = borrar->der->der;
-                borrar->der->der = sucesor;    
+        esHijoIzq = padre->izq && padre->izq->valor == clave;
+    }
+    if (padre) {
+        // busco al siguiente del nodo a borrar.
+        Nodo* borrar = esHijoIzq ? padre->izq : padre->der;
+        if (borrar->der && borrar->der->izq) {
+            Nodo* sucesor = borrar->der;
+            while(sucesor->izq->izq) {
+                sucesor = sucesor->izq;
             }
-            esHijoIzq ? padre->izq : padre->der = borrar->der;
+            borrar->der = sucesor->izq;
+            sucesor->izq = borrar->der->der;
+            borrar->der->der = sucesor;    
+        }
+        (esHijoIzq ? padre->izq : padre->der) = borrar->der;
+        if (borrar->der) {
             borrar->der->izq = borrar->izq;
-            delete borrar;
         }
+        delete borrar;
+    }
+    if (esRaiz) {
+        _raiz = padre->izq;
+        delete padre;
     }
 }
 

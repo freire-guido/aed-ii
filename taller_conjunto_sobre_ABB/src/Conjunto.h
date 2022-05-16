@@ -48,7 +48,7 @@ class Conjunto
         struct Nodo
         {
             // El constructor, toma el elemento al que representa el nodo.
-            Nodo(const T& v): valor{v} {};
+            Nodo(const T& v): valor{v}, izq{nullptr}, der{nullptr} {};
             // El elemento al que representa el nodo.
             T valor;
             // Puntero a la raíz del subárbol izquierdo.
@@ -65,9 +65,6 @@ class Conjunto
                 int profIzq = izq ? izq->profundidad() : 0;
                 return 1 + max(profDer, profIzq);
             }
-            void transplante() {
-
-            }
         };
         // Puntero a la raíz de nuestro árbol.
         Nodo* _raiz;
@@ -78,12 +75,10 @@ class Conjunto
             }
             return nodoActual->valor;
         }
-        void destruir(Nodo* n) {          
-            if (n != nullptr) {
-                destruir(n->izq);
-                n->izq = nullptr;
-                destruir(n->der);
-                n->der = nullptr;
+        void _destruir(Nodo* n) {          
+            if (n) {
+                _destruir(n->izq);
+                _destruir(n->der);
                 delete n;
             }
         }
