@@ -59,7 +59,7 @@ void Conjunto<T>::remover(const T& clave) {
             } else {
                 padre = padre->der;
             }
-            if (!padre) break;
+            if (!padre) return;
             esHijoIzq = padre->izq && clave == padre->izq->valor;
         }
         // guardo z
