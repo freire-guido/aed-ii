@@ -46,44 +46,45 @@ void Conjunto<T>::insertar(const T& clave) {
 
 template <class T>
 void Conjunto<T>::remover(const T& clave) {
-    bool esRaiz = false;
-    Nodo* padre = _raiz;
-    if (padre && padre->valor == clave) {
-        padre = new Nodo(_raiz->valor + 1);
-        padre->izq= _raiz;
-        esRaiz = true;
-    }
-    // busco al padre del nodo a borrar
-    bool esHijoIzq = padre->izq && padre->izq->valor == clave;
-    while (!(esHijoIzq || (padre->der && padre->der->valor == clave))) {
-        if (padre->izq && clave < padre->izq->valor) {
-            padre = padre->izq;
-        } else {
-            padre = padre->der;
-        }
-        esHijoIzq = padre->izq && padre->izq->valor == clave;
-    }
-    if (padre) {
-        // busco al siguiente del nodo a borrar.
-        Nodo* borrar = esHijoIzq ? padre->izq : padre->der;
-        if (borrar->der && borrar->der->izq) {
-            Nodo* sucesor = borrar->der;
-            while(sucesor->izq->izq) {
-                sucesor = sucesor->izq;
+    if (!_raiz || _raiz->valor == clave) {
+        delete _raiz;
+        _raiz = nullptr;
+    } else {
+        // busco padre de z, guardo
+        Nodo* padre = _raiz;
+        bool esHijoIzq = padre->izq && clave == padre->izq->valor;;
+        while (!esHijoIzq && (!padre->der || clave != padre->der->valor)) {
+            if (clave < padre->valor && clave != padre->izq->valor) {
+                padre = padre->izq;
+            } else {
+                padre = padre->der;
             }
-            borrar->der = sucesor->izq;
-            sucesor->izq = borrar->der->der;
-            borrar->der->der = sucesor;    
+            if (!padre) {
+                return;
+            }
+            esHijoIzq = padre->izq && clave == padre->izq->valor;
         }
-        (esHijoIzq ? padre->izq : padre->der) = borrar->der;
+        // guardo z
+        Nodo* borrar = esHijoIzq ? padre->izq : padre->der;
         if (borrar->der) {
-            borrar->der->izq = borrar->izq;
+            // busco padre de y (menor en subarbol der. z), guardo padre
+            Nodo* heredero = borrar->der;
+            if (heredero->izq) {
+                Nodo* tutor = heredero;
+                heredero = heredero->izq;
+                while (heredero->izq) {
+                    tutor = heredero;
+                    heredero = heredero->izq;
+                }
+                tutor->izq = heredero->der;
+                heredero->der = borrar->der;
+            }
+            (esHijoIzq ? padre->izq : padre->der) = heredero;
+            heredero->izq = borrar->izq;
+        } else {
+            (esHijoIzq ? padre->izq : padre->der) = borrar->izq;
         }
         delete borrar;
-    }
-    if (esRaiz) {
-        _raiz = padre->izq;
-        delete padre;
     }
 }
 

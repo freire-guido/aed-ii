@@ -226,3 +226,27 @@ TEST(mios, inserto_varios_borro) {
     ASSERT_TRUE(c.pertenece(25));
     ASSERT_TRUE(c.pertenece(1));
 }
+
+TEST(mios, borro_inexistente) {
+    Conjunto<int> c;
+    c.insertar(4);
+    c.insertar(6);
+    c.insertar(3);
+    c.insertar(5);
+    c.remover(7);
+    ASSERT_EQ(c.cardinal(), 4);
+}
+
+TEST(mios, borro_raiz) {
+    Conjunto<int> c;
+    c.insertar(2);
+    c.remover(2);
+    ASSERT_EQ(c.cardinal(), 0);
+}
+
+TEST(mios, borro_raiz_inexistente) {
+    Conjunto<int> c;
+    c.insertar(2);
+    c.remover(3);
+    ASSERT_EQ(c.cardinal(), 1);
+}
