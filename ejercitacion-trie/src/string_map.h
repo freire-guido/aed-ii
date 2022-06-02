@@ -81,24 +81,31 @@ public:
 private:
 
     struct Nodo {
-        Nodo* siguientes[256];
+        Nodo** siguientes;
         T* definicion;
-        Nodo(): siguientes{nullptr}, definicion{nullptr} {}
-        Nodo(T* def): siguientes{nullptr}, definicion{def} {}
+        Nodo(): siguientes{new Nodo*[256]}, definicion{nullptr} {}
+        Nodo(T* def): siguientes{new Nodo*[256]}, definicion{def} {}
         ~Nodo() {
-            if (siguientes) {
-                for (int i = 0; i < 256; i++) {
+            for (int i = 0; i < 256; i++) {
+                if (siguientes[i]) {
                     delete siguientes[i];
                 }
             }
             delete[] siguientes;
             delete definicion;
         }
+        Nodo(const Nodo& n):  siguientes{new Nodo*[256]}, definicion{n.definicion ? new T(*n.definicion) : nullptr} {
+            for (int i = 0; i < 256; i++) {
+                if (n.siguientes[i]) {
+                    siguientes[i] = new Nodo(*n.siguientes[i]);
+                }
+            }
+        }
 
         unsigned int hijos() {
             unsigned int res;
             for (int i = 0; i < 256; i++) {
-                if (siguientes[256]) {
+                if (siguientes[i]) {
                     res++;
                 }
             }

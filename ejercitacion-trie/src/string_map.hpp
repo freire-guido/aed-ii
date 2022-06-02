@@ -6,7 +6,8 @@ string_map<T>::string_map(const string_map<T>& aCopiar) : string_map() { *this =
 
 template <typename T>
 string_map<T>& string_map<T>::operator=(const string_map<T>& d) {
-    *this = d;
+    _size = d._size;
+    _raiz = new Nodo(*d._raiz);
     return *this;
 }
 
@@ -19,12 +20,10 @@ template <typename T>
 void string_map<T>::insert(const pair<string, T>& p) {
     Nodo* n = _raiz;
     for (const char& c: p.first) {
-        if (n->siguientes) {
-            n = n->siguientes[c];
-        } else {
-            n->siguientes = new Nodo*[256];
-            n = n->siguientes[c];
+        if (!n->siguientes[c]) {
+            n->siguientes[c] = new Nodo();
         }
+        n = n->siguientes[c];
     }
     n->definicion = new T(p.second);
     _size++;
@@ -54,7 +53,7 @@ template <typename T>
 int string_map<T>::count(const string& clave) const {
     Nodo* n = _raiz;
     for (const char& c: clave) {
-        if (n->siguientes) {
+        if (n->siguientes[c]) {
             n = n->siguientes[c];
         } else {
             return 0;
