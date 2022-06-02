@@ -29,33 +29,32 @@ TEST(conjunto_test, test_insertar_cinco_valores) {
 }
 
 TEST(conjunto_test, test_pertenece) {
-    if (true) {
-        Conjunto<int> d;
-        d.insertar(5);
-        d.insertar(4);
-        d.insertar(7);
-        d.insertar(6);
-        d.insertar(8);
-        EXPECT_EQ(d.cardinal(), 5);
-    }
-
-    Conjunto<int> c;
-    for (int i = 0; i < 5; i++) {
+  Conjunto<int> c;
+  if (true) {
+    Conjunto<int> miami;
+    miami.insertar(5);
+    miami.insertar(4);
+    miami.insertar(7);
+    miami.insertar(6);
+    miami.insertar(8);
+  }
+  for (int i = 0; i < 5; i++) {
     EXPECT_FALSE(c.pertenece(i));
-    }
+  }
 
-    // Agrego el 3
-    c.insertar(3);
-    for (int i = 0; i < 5; i++) {
+  // Agrego el 3
+  c.insertar(3);
+  for (int i = 0; i < 5; i++) {
     EXPECT_EQ(c.pertenece(i), i == 3);
-    }
+  }
 
-    // Agrego el 3
-    c.insertar(5);
-    for (int i = 0; i < 4; i++) {
+  // Agrego el 3
+  c.insertar(5);
+  for (int i = 0; i < 4; i++) {
     EXPECT_EQ(c.pertenece(i), i == 3);
-    }
-    EXPECT_TRUE(c.pertenece(5));
+  }
+  EXPECT_TRUE(c.pertenece(5));
+
 }
 
 TEST(conjunto_test, test_insertar_remover_un_valor) {
@@ -139,7 +138,7 @@ TEST(conjunto_test, test_siguiente_inorder) {
     EXPECT_EQ(c.siguiente(15), 16);
 }
 
-const int NCLAVES = 2;
+const int NCLAVES = 1000;
 
 int clave(int i) {
 	return NCLAVES * ((i * i - 100 * i) % NCLAVES) + i;
@@ -196,57 +195,4 @@ TEST(conjunto_test, test_stress) {
 	    int k = clave(i);
 	    ASSERT_FALSE(c.pertenece(k));
     }
-}
-
-TEST(mios, cons_default) {
-    Conjunto<int> c;
-    for (int i = 0; i < 25; i++) {
-        ASSERT_FALSE(c.pertenece(i));
-    }
-}
-
-TEST(mios, inserto_y_borro) {
-    Conjunto<int> c;
-    c.insertar(5);
-    ASSERT_TRUE(c.pertenece(5));
-    c.remover(5);
-    ASSERT_FALSE(c.pertenece(5));
-}
-
-TEST(mios, inserto_varios_borro) {
-    Conjunto<int> c;
-    c.insertar(5);
-    c.insertar(3);
-    c.insertar(10);
-    c.insertar(25);
-    c.insertar(1);
-    ASSERT_TRUE(c.pertenece(5));
-    ASSERT_TRUE(c.pertenece(3));
-    ASSERT_TRUE(c.pertenece(10));
-    ASSERT_TRUE(c.pertenece(25));
-    ASSERT_TRUE(c.pertenece(1));
-}
-
-TEST(mios, borro_inexistente) {
-    Conjunto<int> c;
-    c.insertar(4);
-    c.insertar(6);
-    c.insertar(3);
-    c.insertar(5);
-    c.remover(7);
-    ASSERT_EQ(c.cardinal(), 4);
-}
-
-TEST(mios, borro_raiz) {
-    Conjunto<int> c;
-    c.insertar(2);
-    c.remover(2);
-    ASSERT_EQ(c.cardinal(), 0);
-}
-
-TEST(mios, borro_raiz_inexistente) {
-    Conjunto<int> c;
-    c.insertar(2);
-    c.remover(3);
-    ASSERT_EQ(c.cardinal(), 1);
 }
