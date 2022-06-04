@@ -4,7 +4,7 @@ Conjunto<T>::Conjunto(): _raiz{nullptr} {}
 
 template <class T>
 Conjunto<T>::~Conjunto() {
-    // delete _raiz;
+    _destruir(_raiz);
 }
 
 template <class T>
@@ -46,28 +46,53 @@ void Conjunto<T>::insertar(const T& clave) {
 
 template <class T>
 void Conjunto<T>::remover(const T& clave) {
-    Nodo* nodoActual = _raiz;
-    if (nodoActual && nodoActual->valor == clave) {
-        delete nodoActual;
-        _raiz = nullptr;
+    if (!_raiz) return;
+    Nodo* padre = _raiz;
+    Nodo* borrar = padre;
+    bool eraRaiz = _raiz->valor == clave;
+    bool esHijoIzq = padre->izq && clave == padre->izq->valor;;
+    if (!eraRaiz) {
+        // busco padre de z, guardo
+        while (!esHijoIzq && (!padre->der || clave != padre->der->valor)) {
+            if (clave < padre->valor && clave != padre->izq->valor) {
+                padre = padre->izq;
+            } else {
+                padre = padre->der;
+            }
+            if (!padre) return;
+            esHijoIzq = padre->izq && clave == padre->izq->valor;
+        }
+        // guardo z
+        borrar = esHijoIzq ? padre->izq : padre->der;
     }
-    while (nodoActual) {
-        if (clave < nodoActual->valor) {
-            Nodo* hijoIzq = nodoActual->izq;
-            if (hijoIzq && hijoIzq->valor == clave) {
-                delete hijoIzq;
-                nodoActual->izq = nullptr;
+    Nodo* heredero = borrar->der;
+    if (heredero) {
+        // busco padre de y (menor en subarbol der. z), guardo padre
+        if (heredero->izq) {
+            Nodo* tutor = heredero;
+            heredero = heredero->izq;
+            while (heredero->izq) {
+                tutor = heredero;
+                heredero = heredero->izq;
             }
-            nodoActual = hijoIzq;
+            tutor->izq = heredero->der;
+            heredero->der = borrar->der;
+        }
+        if (!eraRaiz) {
+            (esHijoIzq ? padre->izq : padre->der) = heredero;
+        }
+        heredero->izq = borrar->izq;
+    } else {
+        if (!eraRaiz) {
+            (esHijoIzq ? padre->izq : padre->der) = borrar->izq;
         } else {
-            Nodo* hijoDer = nodoActual->der;
-            if (hijoDer && hijoDer->valor == clave) {
-                delete hijoDer;
-                nodoActual->der = nullptr;
-            }
-            nodoActual = nodoActual->der;
+            heredero = borrar->izq;   
         }
     }
+    if (eraRaiz) {
+        _raiz = heredero;
+    }
+    delete borrar;
 }
 
 template <class T>
