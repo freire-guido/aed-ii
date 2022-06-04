@@ -87,11 +87,10 @@ private:
         Nodo(T* def): siguientes{new Nodo*[256]}, definicion{def} {}
         ~Nodo() {
             for (int i = 0; i < 256; i++) {
-                if (siguientes[i]) {
-                    delete siguientes[i];
-                }
+                delete siguientes[i];
+                siguientes[i] = nullptr;
             }
-            delete[] siguientes;
+            // delete[] siguientes;
             delete definicion;
         }
         Nodo(const Nodo& n):  siguientes{new Nodo*[256]}, definicion{n.definicion ? new T(*n.definicion) : nullptr} {
@@ -103,7 +102,7 @@ private:
         }
 
         unsigned int hijos() {
-            unsigned int res;
+            unsigned int res = 0;
             for (int i = 0; i < 256; i++) {
                 if (siguientes[i]) {
                     res++;

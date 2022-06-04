@@ -34,10 +34,10 @@ T& string_map<T>::operator[](const string& clave){
     bool nueva = false;
     Nodo* n = _raiz;
     for (const char& c: clave) {
-        if (n->siguientes) {
+        if (n->siguientes[c]) {
             n = n->siguientes[c];
         } else {
-            n->siguientes = new Nodo*[256];
+            n->siguientes[c] = new Nodo();
             n = n->siguientes[c];
             nueva = true;
         }
@@ -87,7 +87,7 @@ T& string_map<T>::at(const string& clave) {
 template <typename T>
 void string_map<T>::erase(const string& clave) {
     Nodo* n = _raiz;
-    Nodo* ultn = nullptr;
+    Nodo* ultn = _raiz;
     int ulti = 0;
     for (int i = 0; i < clave.size(); i++) {
         if (n->definicion || n->hijos() > 1) {
@@ -96,10 +96,12 @@ void string_map<T>::erase(const string& clave) {
         }
         n = n->siguientes[clave[i]];
     }
-    if (ultn) {
+    if (ultn->siguientes[clave[ulti]] != n) {
         delete ultn->siguientes[clave[ulti]];
+        ultn->siguientes[clave[ulti]] = nullptr;
     } else {
-        delete _raiz;
+        delete n->definicion;
+        n->definicion = nullptr;
     }
     _size--;
 }
