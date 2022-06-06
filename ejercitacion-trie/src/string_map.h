@@ -81,19 +81,21 @@ public:
 private:
 
     struct Nodo {
+        const unsigned int sz = 256;
         Nodo** siguientes;
         T* definicion;
-        Nodo(): siguientes{new Nodo*[256]}, definicion{nullptr} {}
-        Nodo(T* def): siguientes{new Nodo*[256]}, definicion{def} {}
+        Nodo(): siguientes{new Nodo*[256]()}, definicion{nullptr} {}
+        Nodo(T* def): siguientes{new Nodo*[256]()}, definicion{def} {}
         ~Nodo() {
-            for (int i = 0; i < 256; i++) {
-                delete siguientes[i];
-                siguientes[i] = nullptr;
-            }
-            // delete[] siguientes;
             delete definicion;
+            for (int i = 0; i < 256; i++) {
+                if (siguientes[i]) {
+                    delete siguientes[i];
+                }
+            }
+            delete[] siguientes;
         }
-        Nodo(const Nodo& n):  siguientes{new Nodo*[256]}, definicion{n.definicion ? new T(*n.definicion) : nullptr} {
+        Nodo(const Nodo& n):  siguientes{new Nodo*[256]()}, definicion{n.definicion ? new T(*n.definicion) : nullptr} {
             for (int i = 0; i < 256; i++) {
                 if (n.siguientes[i]) {
                     siguientes[i] = new Nodo(*n.siguientes[i]);
@@ -114,6 +116,16 @@ private:
 
     Nodo* _raiz;
     int _size;
+    // void _destruir(Nodo* n) {
+    //     delete n->definicion;
+    //     for (int i = 0; i < 256; i++) {
+    //         if (n->siguientes[i]) {
+    //             _destruir(n->siguientes[i]);
+    //         }
+    //     }
+    //     delete[] n->siguientes;
+    //     delete n;
+    // }
 };
 
 #include "string_map.hpp"

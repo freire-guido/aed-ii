@@ -25,6 +25,7 @@ void string_map<T>::insert(const pair<string, T>& p) {
         }
         n = n->siguientes[c];
     }
+    delete n->definicion;
     n->definicion = new T(p.second);
     _size++;
 }
