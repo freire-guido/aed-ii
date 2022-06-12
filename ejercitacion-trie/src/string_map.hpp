@@ -6,6 +6,7 @@ string_map<T>::string_map(const string_map<T>& aCopiar) : string_map() { *this =
 
 template <typename T>
 string_map<T>& string_map<T>::operator=(const string_map<T>& d) {
+    delete _raiz;
     _size = d._size;
     _raiz = new Nodo(*d._raiz);
     return *this;
