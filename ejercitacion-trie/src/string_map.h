@@ -87,7 +87,9 @@ private:
         Nodo(const T& d): siguientes(256, nullptr), definicion{new T(d)} {}
         Nodo(const Nodo& n): siguientes(256, nullptr), definicion{n.definicion ? new T(*n.definicion) : nullptr} {
             for (int i = 0; i < 256; i++) {
-                siguientes[i] = new Nodo(*n.siguientes[i]);
+                if (n.siguientes[i]) {
+                    siguientes[i] = new Nodo(*n.siguientes[i]);
+                }
             }
         }
         ~Nodo() {
