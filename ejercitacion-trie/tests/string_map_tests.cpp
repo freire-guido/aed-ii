@@ -217,18 +217,6 @@ TEST(string_map_test, erase) {
     EXPECT_FALSE(sin_prefijos.count("adios") == 1);
 }
 
-TEST(mios, declarar) {
-    if (true) {
-        string_map<int> smap1;
-        smap1.insert(make_pair("a", 1));
-    }
-    string_map<int> smap2;
-}
-
-TEST(mios, nada) {
-    string_map<int> smapa;
-}
-
 #ifdef EXT
 
 TEST(string_map_test, operator_corchetes) {
